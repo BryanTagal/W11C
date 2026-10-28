@@ -12,107 +12,199 @@
 
         body {
             margin: 0;
+            padding: 24px 16px;
             min-height: 100vh;
-            padding: 24px 18px;
             font-family: Arial, sans-serif;
             color: #f8fafc;
-            background: linear-gradient(135deg, #111827, #263b63);
+            background: linear-gradient(135deg, #101827, #172554, #111827);
         }
 
         main {
-            max-width: 1000px;
+            max-width: 1050px;
             margin: auto;
         }
 
-        h1, .status {
+        h1, .subtitle {
             text-align: center;
         }
 
-        .arena {
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #cbd5e1;
+            margin-bottom: 28px;
+        }
+
+        #battle-status {
+            padding: 14px;
+            margin-bottom: 22px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: bold;
+            background: #1e293b;
+            border: 1px solid #334155;
+        }
+
+        .fighters {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 22px;
-            margin-top: 28px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
         }
 
         .fighter {
-            background: #ffffff;
-            color: #172033;
-            border-radius: 18px;
-            padding: 22px;
+            min-width: 0;
+            padding: 20px;
             text-align: center;
-            box-shadow: 0 12px 30px #00000030;
+            border-radius: 18px;
+            border: 1px solid #334155;
+            background: rgba(15, 23, 42, 0.92);
         }
 
         .fighter img {
-            width: min(100%, 190px);
-            height: 170px;
+            width: 150px;
+            max-width: 100%;
+            height: 140px;
             object-fit: contain;
+            image-rendering: pixelated;
         }
 
-        .health-track {
+        .hp-track {
             height: 14px;
-            background: #e2e8f0;
-            border-radius: 20px;
             overflow: hidden;
             margin: 12px 0;
+            border-radius: 20px;
+            background: #334155;
         }
 
-        .health-fill {
-            height: 100%;
+        .hp-bar {
             width: 100%;
+            height: 100%;
+            border-radius: 20px;
             background: #22c55e;
             transition: width 0.25s;
         }
 
-        .attacks {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
+        .status-effects {
+            min-height: 22px;
+            color: #fcd34d;
+            font-size: 13px;
         }
 
-        button, a {
+        .section {
+            margin-top: 24px;
+            padding: 20px;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            background: rgba(15, 23, 42, 0.92);
+        }
+
+        .section h2 {
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        #attacks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        button, .home-link {
+            padding: 12px 14px;
             border: 0;
             border-radius: 10px;
-            padding: 12px 16px;
-            background: #ef4444;
-            color: white;
+            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
             text-decoration: none;
+            color: #0f172a;
+            background: #67e8f9;
+        }
+
+        button:hover:not(:disabled), .home-link:hover {
+            background: #a5f3fc;
         }
 
         button:disabled {
-            opacity: 0.45;
             cursor: not-allowed;
+            opacity: 0.4;
         }
 
-        .secondary {
-            background: #475569;
+        .move-button {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            text-align: left;
         }
 
-        .log {
-            margin-top: 24px;
-            padding: 20px;
-            border-radius: 14px;
-            background: #ffffff12;
-            border: 1px solid #ffffff30;
-            min-height: 80px;
-            line-height: 1.7;
+        .move-detail {
+            font-size: 12px;
+            font-weight: normal;
         }
 
-        .actions {
+        .item-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .potion-button {
+            background: #86efac;
+        }
+
+        .catch-button {
+            background: #fda4af;
+        }
+
+        #battle-log {
+            max-height: 230px;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+
+        #battle-log p {
+            padding: 9px 12px;
+            margin: 7px 0;
+            border-radius: 8px;
+            color: #e2e8f0;
+            background: #1e293b;
+            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        .bottom-actions {
             display: flex;
             justify-content: center;
-            gap: 12px;
             flex-wrap: wrap;
-            margin-top: 22px;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .home-link {
+            background: #cbd5e1;
         }
 
         @media (max-width: 600px) {
-            .arena {
+            body {
+                padding: 18px 10px;
+            }
+
+            .fighters {
                 grid-template-columns: 1fr;
+            }
+
+            .fighter {
+                padding: 14px;
+            }
+
+            .fighter img {
+                height: 110px;
+            }
+
+            .section {
+                padding: 14px;
             }
         }
     </style>
@@ -120,38 +212,61 @@
 <body>
     <main>
         <h1>Pokémon Battle Arena</h1>
-        <p id="battle-status" class="status">Loading battle...</p>
+        <p class="subtitle">Choose your moves wisely!</p>
 
-        <section class="arena">
+        <div id="battle-status" role="status" aria-live="polite">
+            Loading battle...
+        </div>
+
+        <section class="fighters">
             <article class="fighter">
                 <h2 id="user-name">Your Pokémon</h2>
                 <img id="user-image" alt="Your Pokémon">
                 <p id="user-hp">HP: 100 / 100</p>
-                <div class="health-track">
-                    <div id="user-health-bar" class="health-fill"></div>
+                <div class="hp-track">
+                    <div id="user-health-bar" class="hp-bar"></div>
                 </div>
-                <h3>Your Attacks</h3>
-                <div id="attacks" class="attacks"></div>
+                <p id="user-effects" class="status-effects"></p>
             </article>
 
             <article class="fighter">
-                <h2 id="computer-name">Enemy Pokémon</h2>
-                <img id="computer-image" alt="Enemy Pokémon">
+                <h2 id="computer-name">Opponent</h2>
+                <img id="computer-image" alt="Opponent Pokémon">
                 <p id="computer-hp">HP: 100 / 100</p>
-                <div class="health-track">
-                    <div id="computer-health-bar" class="health-fill"></div>
+                <div class="hp-track">
+                    <div id="computer-health-bar" class="hp-bar"></div>
                 </div>
+                <p id="computer-effects" class="status-effects"></p>
             </article>
         </section>
 
-        <section class="log">
-            <strong>Battle Log</strong>
-            <div id="battle-log" aria-live="polite">The battle is about to begin!</div>
+        <section class="section">
+            <h2>Your Moves</h2>
+            <p>Damage varies. Each move has a limited number of uses.</p>
+            <div id="attacks"></div>
         </section>
 
-        <div class="actions">
-            <a class="secondary" href="index.html">Home</a>
+        <section class="section">
+            <h2>Items</h2>
+            <div class="item-actions">
+                <button id="potion-button" class="potion-button">
+                    Potion × 2
+                </button>
+                <button id="catch-button" class="catch-button">
+                    Throw Poké Ball
+                </button>
+            </div>
+            <p id="item-info">Potions restore HP. Catch chances improve when the opponent is weak.</p>
+        </section>
+
+        <section class="section">
+            <h2>Battle Log</h2>
+            <div id="battle-log" aria-live="polite"></div>
+        </section>
+
+        <div class="bottom-actions">
             <button id="new-battle">Start New Battle</button>
+            <a class="home-link" href="index.html">Pokémon Selection</a>
         </div>
     </main>
 

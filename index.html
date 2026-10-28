@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Pokémon Battle</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #f8fafc;
+            background: linear-gradient(135deg, #111827, #263b63);
+            padding: 32px 20px;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        h1, .subtitle {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: clamp(30px, 5vw, 48px);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #cbd5e1;
+            margin-bottom: 32px;
+        }
+
+        #pokemon-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 22px;
+        }
+
+        .pokemon-card {
+            background: #ffffff;
+            color: #172033;
+            border-radius: 18px;
+            padding: 22px;
+            text-align: center;
+            box-shadow: 0 12px 30px #00000030;
+        }
+
+        .pokemon-card img {
+            width: 160px;
+            height: 160px;
+            object-fit: contain;
+        }
+
+        .pokemon-card p {
+            color: #536174;
+            min-height: 42px;
+        }
+
+        button, .resume-link {
+            display: inline-block;
+            border: 0;
+            border-radius: 10px;
+            background: #ef4444;
+            color: white;
+            padding: 12px 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        button:hover, .resume-link:hover {
+            background: #dc2626;
+        }
+
+        .resume-area {
+            text-align: center;
+            margin: 26px 0;
+        }
+
+        #message {
+            text-align: center;
+            min-height: 24px;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>⚔️ Classic Pokémon Battle</h1>
+        <p class="subtitle">Choose your Pokémon and prepare for battle!</p>
+
+        <div id="resume-area" class="resume-area"></div>
+        <div id="pokemon-list"></div>
+        <p id="message" aria-live="polite"></p>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
